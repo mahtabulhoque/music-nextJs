@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { Meteors } from "@/components/ui/meteors";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { Button } from "@/components/ui/moving-borders";
 
@@ -33,6 +34,7 @@ const HeroSection = () => {
          Explore Courses
          </Button>
           </Link>
+          <Meteors number={20} />
         </div>
       </div>
     </div>

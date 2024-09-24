@@ -1,6 +1,8 @@
 // import defaultTheme from "tailwindcss/defaultTheme";
 // import colors from "tailwindcss/colors"; 
 
+import type { PluginAPI } from 'tailwindcss/types/config';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -13,10 +15,20 @@ module.exports = {
   theme: {
     extend: {
       animation: {
+        "meteor-effect": "meteor 5s linear infinite",
         spotlight: "spotlight 2s ease .75s 1 forwards",
         scroll: "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite"
       },
       keyframes: {
+        meteor: {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": {
+            transform: "rotate(215deg) translateX(-500px)",
+            opacity: "0",
+          },
+        },
+
         spotlight: {
           "0%": {
             opacity: 0,
@@ -40,8 +52,8 @@ module.exports = {
 };
 
 // Plugin to add Tailwind colors as CSS variables
-function addVariablesForColors({ addBase, theme }) {
-  let newVars = Object.entries(theme("colors")).reduce((acc, [key, val]) => {
+function addVariablesForColors({ addBase, theme }: PluginAPI) {
+  const newVars = Object.entries(theme("colors")).reduce((acc, [key, val]) => {
     if (typeof val === "string") {
       acc[`--${key}`] = val;
     } else {
@@ -50,9 +62,11 @@ function addVariablesForColors({ addBase, theme }) {
       });
     }
     return acc;
-  }, {});
+  }, {} as Record<string, string>);  // Ensure type is inferred correctly
 
   addBase({
     ":root": newVars,
   });
 }
+
+export default addVariablesForColors;
